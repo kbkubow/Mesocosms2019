@@ -21,5 +21,7 @@ Look at embryo genotypes over time in A/B tanks
         embryonomissAB$cloneid <- paste(embryonomissAB$Clone, embryonomissAB$ID, sep="_")
         embryonomissABbyepp <- embryonomissAB[!duplicated(embryonomissAB$cloneid),]
 
-### Plot distribution of A, B, H by tank by week
-        ggplot(data=embryonomissABbyepp, aes(x=as.factor(Week), y=ABHybrid, fill=ABHybrid)) + geom_col() + facet_wrap(~Clone)
+### Aggregate the data
+        genocounts <- embryonomissABbyepp[, .N, by=list(Clone, Week, ABHybrid)]
+        ggplot(data=genocounts, aes(x=Week, y=N, fill=ABHybrid)) + geom_bar(stat="identity") + facet_wrap(~Clone) + 
+        theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(), panel.background = element_blank(), axis.line = element_line(colour = "black"))
